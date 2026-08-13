@@ -1,25 +1,47 @@
 # RESTAURANTE-SIS
 Sistema web para la gestión de un restaurante.
+
 Requerimientos funcionales
+
 RF01: El sistema debe permitir registrar, iniciar sesión y gestionar usuarios.
+
 RF02: El sistema debe permitir registrar y gestionar clientes.
+
 RF03: El sistema debe permitir registrar, modificar y cancelar reservas.
+
 RF04: El sistema debe permitir gestionar las mesas del restaurante.
+
 RF05: El sistema debe permitir registrar y gestionar categorías y platos del menú.
+
 RF06: El sistema debe permitir registrar y gestionar pedidos.
+
 RF07: El sistema debe permitir registrar y gestionar ventas.
+
 RF08: El sistema debe permitir controlar el inventario de productos e insumos.
+
 RF09: El sistema debe permitir registrar y gestionar proveedores.
+
 RF10: El sistema debe permitir generar y consultar reportes.
+
 Requerimientos no funcionales
+
 RNF01: El sistema debe contar con autenticación para controlar el acceso.
+
 RNF02: El sistema debe ser fácil de utilizar y contar con una interfaz intuitiva.
+
 RNF03: El sistema debe responder de manera adecuada a las operaciones realizadas.
+
 RNF04: El sistema debe mantener la integridad y consistencia de los datos.
+
 RNF05: El sistema debe ser compatible con los principales navegadores web.
+
 RNF06: El sistema debe adaptarse a diferentes tamaños de pantalla.
-RNF07: El sistema debe contar con una estructura que facilite su mantenimiento y futuras modificaciones.
+
+RNF07: El sistema debe contar con una estructura que facilite su mantenimiento y 
+futuras modificaciones.
+
 Historias de usuario
+
 HU01 — Gestión de usuarios
 
 Como administrador,
