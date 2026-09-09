@@ -1,0 +1,239 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum RolUsuario {
+  ADMIN
+  MESERO
+  COCINERO
+  CAJERO
+}
+
+enum EstadoReserva {
+  PENDIENTE
+  CONFIRMADA
+  CANCELADA
+  COMPLETADA
+}
+
+enum EstadoMesa {
+  DISPONIBLE
+  OCUPADA
+  RESERVADA
+  MANTENIMIENTO
+}
+
+enum EstadoPedido {
+  PENDIENTE
+  EN_PREPARACION
+  LISTO
+  ENTREGADO
+  CANCELADO
+}
+
+enum EstadoVenta {
+  PENDIENTE
+  PAGADA
+  ANULADA
+}
+
+enum MetodoPago {
+  EFECTIVO
+  TARJETA
+  QR
+}
+
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  email     String   @unique
+  password  String
+  rol       RolUsuario @default(MESERO)
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  pedidos   Pedido[]
+  ventas    Venta[]
+
+  @@map("usuarios")
+}
+
+model Cliente {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  telefono  String?
+  email     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reservas  Reserva[]
+  pedidos   Pedido[]
+  ventas    Venta[]
+
+  @@map("clientes")
+}
+
+model Mesa {
+  id          Int      @id @default(autoincrement())
+  numero      Int      @unique
+  capacidad   Int
+  estado      EstadoMesa @default(DISPONIBLE)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  reservas    Reserva[]
+  pedidos     Pedido[]
+
+  @@map("mesas")
+}
+
+model Reserva {
+  id          Int      @id @default(autoincrement())
+  fecha       DateTime
+  cantidad    Int
+  estado      EstadoReserva @default(PENDIENTE)
+  observacion String?
+  clienteId   Int
+  mesaId      Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  cliente     Cliente @relation(fields: [clienteId], references: [id])
+  mesa        Mesa    @relation(fields: [mesaId], references: [id])
+
+  @@index([fecha])
+  @@index([clienteId])
+  @@index([mesaId])
+  @@map("reservas")
+}
+
+model Categoria {
+  id          Int      @id @default(autoincrement())
+  nombre      String   @unique
+  descripcion String?
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  platos      Plato[]
+
+  @@map("categorias")
+}
+
+model Plato {
+  id           Int      @id @default(autoincrement())
+  nombre       String
+  descripcion  String?
+  precio       Decimal  @db.Decimal(10, 2)
+  disponible   Boolean  @default(true)
+  categoriaId  Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  categoria    Categoria @relation(fields: [categoriaId], references: [id])
+  detalles     DetallePedido[]
+
+  @@index([categoriaId])
+  @@map("platos")
+}
+
+model Pedido {
+  id          Int      @id @default(autoincrement())
+  fecha       DateTime @default(now())
+  estado      EstadoPedido @default(PENDIENTE)
+  observacion String?
+  usuarioId   Int
+  clienteId   Int?
+  mesaId      Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  usuario     Usuario @relation(fields: [usuarioId], references: [id])
+  cliente     Cliente? @relation(fields: [clienteId], references: [id])
+  mesa        Mesa? @relation(fields: [mesaId], references: [id])
+  detalles    DetallePedido[]
+  venta       Venta?
+
+  @@index([usuarioId])
+  @@index([clienteId])
+  @@index([mesaId])
+  @@index([fecha])
+  @@map("pedidos")
+}
+
+model DetallePedido {
+  id          Int      @id @default(autoincrement())
+  cantidad    Int
+  precio      Decimal  @db.Decimal(10, 2)
+  pedidoId    Int
+  platoId     Int
+
+  pedido      Pedido @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  plato       Plato  @relation(fields: [platoId], references: [id])
+
+  @@index([pedidoId])
+  @@index([platoId])
+  @@map("detalles_pedido")
+}
+
+model Venta {
+  id          Int      @id @default(autoincrement())
+  total       Decimal  @db.Decimal(10, 2)
+  metodoPago  MetodoPago
+  estado      EstadoVenta @default(PENDIENTE)
+  fecha       DateTime @default(now())
+  pedidoId    Int      @unique
+  clienteId   Int?
+  usuarioId   Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  pedido      Pedido @relation(fields: [pedidoId], references: [id])
+  cliente     Cliente? @relation(fields: [clienteId], references: [id])
+  usuario     Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@index([fecha])
+  @@index([clienteId])
+  @@index([usuarioId])
+  @@map("ventas")
+}
+
+model Proveedor {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  contacto    String?
+  telefono    String?
+  email       String?
+  direccion   String?
+  activo      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  inventarios Inventario[]
+
+  @@map("proveedores")
+}
+
+model Inventario {
+  id             Int      @id @default(autoincrement())
+  nombre         String
+  descripcion    String?
+  unidad         String
+  stock          Decimal  @db.Decimal(10, 2)
+  stockMinimo    Decimal  @db.Decimal(10, 2)
+  precioCompra   Decimal  @db.Decimal(10, 2)
+  proveedorId    Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  proveedor      Proveedor? @relation(fields: [proveedorId], references: [id])
+
+  @@index([proveedorId])
+  @@map("inventario")
+}
