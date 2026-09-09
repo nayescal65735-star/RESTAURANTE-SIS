@@ -3,14 +3,23 @@ RESTAURANTE-SIS
 Sistema web para la gestión de un restaurante, desarrollado como proyecto académico para la asignatura Sistemas Paralelos.
 
 Información del proyecto
+
 Proyecto: RESTAURANTE-SIS
+
 Asignatura: Sistemas Paralelos
+
 Docente: Ing. Elias Cassal Baldiviezo
+
 Año: 2026
+
 Arquitectura: Frontend + Backend + PostgreSQL
+
 Contenedores: Docker Compose
+
 ORM: Prisma
+
 Base de datos: PostgreSQL 15
+
 1. Descripción del proyecto
 
 RESTAURANTE-SIS es un sistema web orientado a la gestión de las principales operaciones de un restaurante.
