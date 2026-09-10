@@ -22,32 +22,67 @@ Frontend: React + Vite
 Base de datos: PostgreSQL 15 con Prisma ORM
 Despliegue: Docker Compose (3 contenedores: backend, frontend y base de datos)
 Agente de IA: reglas y skills de TasteSkill y personalizadas para SysLab 2.0
+
 Estructura del Repositorio
+
+
 RESTAURANTE-SIS/
+
 ├── agente/
+
 │   ├── .agents/
+
 │   │   └── skills/
+
 │   │       ├── design-taste-frontend/
+
 │   │       ├── backend-rest/
+
 │   │       ├── prisma-postgresql/
+
 │   │       └── syslab-architecture/
+
 │   ├── rules.md
+
 │   └── skills-lock.json
+
 │
+
 ├── backend/
+
 │   ├── index.js
+
 │   ├── Dockerfile
+
 │   ├── package.json
+
 │   └── prisma/
+
 │       ├── migrations/
+
 │       ├── schema.prisma
+
 │       └── seed.js
+
 │
+
 ├── frontend/
+
 │   ├── src/
+
 │   ├── Dockerfile
+
 │   └── package.json
+
 │
+
 ├── docker-compose.yml
+
 └── README.md
+
+
+
+
+
+
 
